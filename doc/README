@@ -1,0 +1,24 @@
+sebd v0.1 (simple encrypted backdoor)
+
+sebd is another linux backdoor.
+
+what does sebd provide:
+- a raw sniffer
+- aes encrypted shell
+- full tty/pty support
+- connect back (bypass moust of the firewall's)
+- does not open a port
+- you can log in on any opened port
+- cleans the logs (wipes out the ip from where the sniffer received the password)
+- tcpd function (if the pasword is from an ip that isn't in the list -> no shell)
+- password is encrypted with DES (hardcoded only in the server binary)
+
+usage:
+
+on the server host run: ./sebd
+on the client host run: ./client -h host|ip -d port
+
+AUTHOR: slider
+EMAIL: slider@go.ro
+
+PS: check out the CREDITS...it's only a hack

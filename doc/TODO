@@ -1,0 +1,6 @@
+- resolve the bugs in the code
+- log cleaner
+- encryption/decryption for the sent password
+- communication over RAW socket...not TCP
+
+

@@ -1,0 +1,6 @@
+- sometimes the DELAY isn't rigth
+- sometimes you get this error:
+     tcsetattr: Interrupted system call - proplems controling the ports
+
+    
+     

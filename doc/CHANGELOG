@@ -1,0 +1,4 @@
+* Changed the dir name to sebd-0.2
+- added some pid thingies
+- fixed an exec() typo
+- added thingie to fake the name in ps

